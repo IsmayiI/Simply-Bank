@@ -12,8 +12,9 @@ const btnScrollTo = document.querySelector('.btn--scroll-to')
 const section1 = document.getElementById('section--1')
 const section2 = document.getElementById('section--2')
 const section3 = document.getElementById('section--3')
-const navLink = document.querySelectorAll('.nav__link')
 const navLinks = document.querySelector('.nav__links')
+
+const operationsTabContainer = document.querySelector('.operations__tab-container')
 
 // ========================================Functions
 
@@ -30,9 +31,33 @@ const closeModalWindow = () => {
 
 const scrollToSection = (e) => {
    e.preventDefault()
-   if (e.target.classList.contains('nav__link')) {
+   if (e.target.classList.contains('nav__link') && e.target.getAttribute('href') !== '#') {
       const href = e.target.getAttribute('href')
       document.querySelector(href).scrollIntoView({ behavior: 'smooth' })
+   }
+}
+
+const onActiveTab = (tab, content) => {
+   if (!tab || !content) return
+   tab.classList.add('operations__tab--active')
+   content.classList.add('operations__content--active')
+}
+
+const offActiveTab = (tab, content) => {
+   if (!tab || !content) return
+   tab.classList.remove('operations__tab--active')
+   content.classList.remove('operations__content--active')
+}
+
+const activateTab = (e) => {
+   const activeTab = e.target
+   if (activeTab.classList.contains('operations__tab')) {
+      const tabs = document.querySelectorAll('.operations__tab')
+      const contents = document.querySelectorAll('.operations__content')
+      const activeContent = document.querySelector(`.operations__content--${activeTab.dataset.tab}`)
+
+      tabs.forEach((tab, i) => offActiveTab(tab, contents[i]))
+      onActiveTab(activeTab, activeContent)
    }
 }
 
@@ -56,8 +81,14 @@ overlay.addEventListener('click', closeModalWindow);
 
 navLinks.addEventListener('click', scrollToSection)
 
+operationsTabContainer.addEventListener('click', activateTab)
+
+
 
 // ========================================Code
+
+
+
 
 
 
