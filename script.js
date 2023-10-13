@@ -61,6 +61,15 @@ const activateTab = (e) => {
    }
 }
 
+const animationHoverNavLinks = (e, op) => {
+   if (e.target.classList.contains('nav__link')) {
+      const activeLink = e.target
+      const links = [...document.querySelectorAll('.nav__link')].filter(link => link !== activeLink)
+
+      links.forEach(link => link.style.opacity = op)
+   }
+}
+
 
 // ========================================Events
 
@@ -80,6 +89,14 @@ btnCloseModalWindow.addEventListener('click', closeModalWindow);
 overlay.addEventListener('click', closeModalWindow);
 
 navLinks.addEventListener('click', scrollToSection)
+
+navLinks.addEventListener('mouseover', (e) => {
+   animationHoverNavLinks(e, 0.5)
+})
+
+navLinks.addEventListener('mouseout', (e) => {
+   animationHoverNavLinks(e, 1)
+})
 
 operationsTabContainer.addEventListener('click', activateTab)
 
