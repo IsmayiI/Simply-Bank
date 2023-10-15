@@ -13,6 +13,8 @@ const section1 = document.getElementById('section--1')
 const section2 = document.getElementById('section--2')
 const section3 = document.getElementById('section--3')
 const navLinks = document.querySelector('.nav__links')
+const nav = document.querySelector('.nav')
+const header = document.querySelector('.header')
 
 const operationsTabContainer = document.querySelector('.operations__tab-container')
 
@@ -103,6 +105,33 @@ operationsTabContainer.addEventListener('click', activateTab)
 
 
 // ========================================Code
+
+
+// ========================================Observe
+
+
+const navHeight = nav.getBoundingClientRect().height
+
+const observerCallback = (entries) => {
+   const entry = entries[0]
+
+   if (!entry.isIntersecting) {
+      nav.classList.add('sticky')
+   }
+   else {
+      nav.classList.remove('sticky')
+   }
+}
+
+const observer = new IntersectionObserver(observerCallback, {
+   root: null,
+   threshold: 0,
+   rootMargin: `-${navHeight}px`
+})
+
+observer.observe(header)
+
+
 
 
 

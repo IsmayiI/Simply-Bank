@@ -125,6 +125,27 @@ img {
 .nav.sticky {
    position: fixed;
    background-color: rgba(255, 255, 255, 0.95);
+   animation: stickyHover .8s;
+}
+
+@keyframes stickyHover {
+   0% {
+      opacity: 0;
+   }
+
+   100% {
+      opacity: 1;
+   }
+}
+
+@keyframes stickyHoverReverse {
+   0% {
+      opacity: 1;
+   }
+
+   100% {
+      opacity: 0;
+   }
 }
 
 .nav__logo {
