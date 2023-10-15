@@ -123,13 +123,32 @@ const observerCallback = (entries) => {
    }
 }
 
-const observer = new IntersectionObserver(observerCallback, {
+const observerHeader = new IntersectionObserver(observerCallback, {
    root: null,
    threshold: 0,
    rootMargin: `-${navHeight}px`
 })
 
-observer.observe(header)
+observerHeader.observe(header)
+
+const allSections = document.querySelectorAll('.section')
+
+const appearanceSection = (entries, observer) => {
+   const entry = entries[0]
+   if (!entry.isIntersecting) return
+   entry.target.classList.remove('section--hidden')
+   observer.unobserve(entry.target)
+}
+
+const observerSection = new IntersectionObserver(appearanceSection, {
+   root: null,
+   threshold: 0.2,
+})
+
+allSections.forEach(section => {
+   observerSection.observe(section)
+   section.classList.add('section--hidden')
+})
 
 
 
