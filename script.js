@@ -110,6 +110,8 @@ operationsTabContainer.addEventListener('click', activateTab)
 // ========================================Observe
 
 
+// === Header
+
 const navHeight = nav.getBoundingClientRect().height
 
 const observerCallback = (entries) => {
@@ -131,13 +133,16 @@ const observerHeader = new IntersectionObserver(observerCallback, {
 
 observerHeader.observe(header)
 
+// === Sections
+
 const allSections = document.querySelectorAll('.section')
 
 const appearanceSection = (entries, observer) => {
-   const entry = entries[0]
-   if (!entry.isIntersecting) return
-   entry.target.classList.remove('section--hidden')
-   observer.unobserve(entry.target)
+   entries.forEach(entry => {
+      if (!entry.isIntersecting) return
+      entry.target.classList.remove('section--hidden')
+      observer.unobserve(entry.target)
+   })
 }
 
 const observerSection = new IntersectionObserver(appearanceSection, {
@@ -149,6 +154,31 @@ allSections.forEach(section => {
    observerSection.observe(section)
    section.classList.add('section--hidden')
 })
+
+// === Images
+
+const lazyImages = document.querySelectorAll('img[data-src]')
+
+const showImage = (entries, observer) => {
+   entries.forEach(entry => {
+      const lazyImg = entry.target
+      if (!entry.isIntersecting) return
+      lazyImg.src = lazyImg.dataset.src
+      lazyImg.addEventListener('load', () => {
+         lazyImg.classList.remove('lazy-img')
+      })
+      observer.unobserve(lazyImg)
+   })
+}
+
+const observerLazyImages = new IntersectionObserver(showImage, {
+   root: null,
+   threshold: 0.8,
+})
+
+lazyImages.forEach(img => observerLazyImages.observe(img))
+
+
 
 
 
