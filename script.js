@@ -15,10 +15,21 @@ const section3 = document.getElementById('section--3')
 const navLinks = document.querySelector('.nav__links')
 const nav = document.querySelector('.nav')
 const header = document.querySelector('.header')
-
+const slider = document.querySelector('.slider')
+const slides = document.querySelectorAll('.slide')
+const btnLeft = document.querySelector('.slider__btn--left')
+const btnRight = document.querySelector('.slider__btn--right')
 const operationsTabContainer = document.querySelector('.operations__tab-container')
+const dotsContainer = document.querySelector('.dots')
+
+
+
+let currentSlide = 0
+const countSlides = slides.length
 
 // ========================================Functions
+
+
 
 const openModalWindow = (e) => {
    e.preventDefault()
@@ -72,6 +83,40 @@ const animationHoverNavLinks = (e, op) => {
    }
 }
 
+const moveSlide = (currentSlide) => {
+   slides.forEach((slide, i) => {
+      slide.style.transform = `translateX(${(i - currentSlide) * 100}%)`
+   })
+}
+
+const nextSlide = () => {
+   if (currentSlide === countSlides - 1) {
+      currentSlide = 0
+   } else {
+      currentSlide += 1
+   }
+
+   moveSlide(currentSlide)
+   activeDot(currentSlide)
+}
+
+const previousSlide = () => {
+   if (currentSlide === 0) {
+      currentSlide = countSlides - 1
+   } else {
+      currentSlide -= 1
+   }
+
+   moveSlide(currentSlide)
+   activeDot(currentSlide)
+
+}
+
+const activeDot = (currentSlide) => {
+   document.querySelectorAll('.dots__dot').forEach(dot => dot.classList.remove('dots__dot--active'))
+   document.querySelector(`.dots__dot[data-slide="${currentSlide}"]`).classList.add('dots__dot--active')
+}
+
 
 // ========================================Events
 
@@ -102,9 +147,23 @@ navLinks.addEventListener('mouseout', (e) => {
 
 operationsTabContainer.addEventListener('click', activateTab)
 
+btnRight.addEventListener('click', nextSlide)
 
+btnLeft.addEventListener('click', previousSlide)
 
-// ========================================Code
+document.addEventListener('keydown', (e) => {
+   if (e.key === 'ArrowRight') nextSlide()
+   if (e.key === 'ArrowLeft') previousSlide()
+})
+
+dotsContainer.addEventListener('click', (e) => {
+   if (e.target.classList.contains('dots__dot')) {
+      currentSlide = +e.target.dataset.slide
+
+      moveSlide(currentSlide)
+      activeDot(currentSlide)
+   }
+})
 
 
 // ========================================Observe
@@ -177,6 +236,35 @@ const observerLazyImages = new IntersectionObserver(showImage, {
 })
 
 lazyImages.forEach(img => observerLazyImages.observe(img))
+
+
+// ========================================Code
+
+
+slides.forEach((_, i) => {
+   const dot = `<button class="dots__dot" data-slide="${i}"></button>`
+   dotsContainer.insertAdjacentHTML('beforeend', dot)
+})
+
+
+moveSlide(0)
+activeDot(currentSlide)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
